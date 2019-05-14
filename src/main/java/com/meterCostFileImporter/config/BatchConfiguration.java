@@ -19,7 +19,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+import com.meterCostFileImporter.controller.LocationItemProcessor;
 import com.meterCostFileImporter.entity.Location;
+import com.meterCostFileImporter.listener.JobCompletionNotificationListener;
 
 @Configuration
 @EnableBatchProcessing
@@ -37,7 +39,7 @@ public class BatchConfiguration {
             .name("locationItemReader")
             .resource(new ClassPathResource("data.csv"))
             .delimited()
-            .names(new String[]{"country", "state", "city", "neighborhood"})
+            .names(new String[]{"country", "state", "city", "neighborhood", "cost"})
             .fieldSetMapper(new BeanWrapperFieldSetMapper<Location>() {{
                 setTargetType(Location.class);
             }})
@@ -53,7 +55,7 @@ public class BatchConfiguration {
     public JdbcBatchItemWriter<Location> writer(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<Location>()
             .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-            .sql("INSERT INTO location (country, state, city, neighborhood) VALUES (:country, :state, :city, :neighborhood)")
+            .sql("INSERT INTO location (country, state, city, neighborhood, cost) VALUES (:country, :state, :city, :neighborhood, :cost)")
             .dataSource(dataSource)
             .build();
     }
@@ -69,7 +71,7 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Step step1(JdbcBatchItemWriter<Person> writer) {
+    public Step step1( JdbcBatchItemWriter<Location> writer) {
         return stepBuilderFactory.get("step1")
             .<Location, Location> chunk(2)
             .reader(reader())
@@ -77,5 +79,4 @@ public class BatchConfiguration {
             .writer(writer)
             .build();
     }
-    // end::jobstep[]
 }

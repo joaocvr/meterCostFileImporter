@@ -1,5 +1,7 @@
 package com.meterCostFileImporter.entity;
 
+import java.math.BigDecimal;
+
 public class Location {
 
 	private Long id;
@@ -7,7 +9,20 @@ public class Location {
 	private String state;
 	private String city;
 	private String neighborhood;
-	private LocationCost locationCost;
+	private BigDecimal cost;
+
+	public Location() {
+		super();
+	}
+	
+	public Location(Long id, String country, String state, String city, String neighborhood,  BigDecimal cost) {
+		this.id = id;
+		this.country = country;
+		this.state = state;
+		this.city = city;
+		this.neighborhood = neighborhood;
+		this.cost = cost;
+	}
 
 	public Long getId() {
 		return id;
@@ -49,17 +64,17 @@ public class Location {
 		this.neighborhood = neighborhood;
 	}
 
-	public LocationCost getLocationCost() {
-		return locationCost;
+	public BigDecimal getCost() {
+		return cost;
 	}
 
-	public void setLocationCost(LocationCost locationCost) {
-		this.locationCost = locationCost;
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
 	}
 
 	@Override
 	public String toString() {
-		return this.country + ", " + this.state + ", " + this.city + ", " + this.neighborhood;
+		return this.country + ", " + this.state + ", " + this.city + ", " + this.neighborhood + ", " + this.cost;
 	}
 	
 }
