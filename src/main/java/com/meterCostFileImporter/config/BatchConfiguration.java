@@ -55,7 +55,7 @@ public class BatchConfiguration {
     public JdbcBatchItemWriter<Location> writer(DataSource dataSource) {
         return new JdbcBatchItemWriterBuilder<Location>()
             .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
-            .sql("INSERT INTO location (country, state, city, neighborhood, cost) VALUES (:country, :state, :city, :neighborhood, :cost)")
+            .sql("INSERT INTO location (location_id, country, state, city, neighborhood, cost) VALUES (DEFAULT, :country, :state, :city, :neighborhood, :cost)")
             .dataSource(dataSource)
             .build();
     }
